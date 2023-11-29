@@ -10,6 +10,9 @@ inputs:
   region:
     description: 'region to deploy to'
     required: true
+  fly-api-token-property:
+    description: 'Fly API token property'
+    required: true
   
 runs:
   using: composite
@@ -18,6 +21,9 @@ runs:
       name: Deploy to a specific Fly region
       uses: docker://darinpope/flyctl:0.1.129
       shell: sh
+      env:
+        FLY_API_TOKEN: ${{ secrets.${{ inputs.fly-api-token-property }} }}
+        NO_COLOR: "1"
       run: |
         flyctl auth docker
         flyctl regions set ${{ inputs.region }}
