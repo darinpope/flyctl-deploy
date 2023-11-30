@@ -10,8 +10,8 @@ inputs:
   region:
     description: 'region to deploy to'
     required: true
-  fly-api-token-property:
-    description: 'Fly API token property'
+  fly-api-token:
+    description: 'Fly API token'
     required: true
   
 runs:
@@ -22,9 +22,10 @@ runs:
       uses: docker://darinpope/flyctl:0.1.129
       shell: sh
       env:
-        FLY_API_TOKEN: ${{ secrets.${{ inputs.fly-api-token-property }} }}
+        FLY_API_TOKEN: ${{ inputs.fly-api-token }}
         NO_COLOR: "1"
       run: |
+        echo $FLY_API_TOKEN
         flyctl auth docker
         flyctl regions set ${{ inputs.region }}
         flyctl deploy --image ${{ inputs.image-name }} --now
